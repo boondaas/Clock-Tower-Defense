@@ -33,10 +33,6 @@ You get money from 2 sources: enemy drops and working.
 Each enemy drops 1 coin when it dies.
 
 To work, click on Duke on the tower. when the work cooldown ends, you get 1 coin.
-
-### Stats
-
-You can see your current stats in the top-left corner, as well as the current HP of the following enemy.
 ---
 
 ## Optimization Strategies
