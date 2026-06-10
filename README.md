@@ -200,3 +200,6 @@ This project was built under a simple philosophy:
 Unless it's **don't.**
 
 Then don't.
+
+
+### If you encounter any bugs, reach me out in Discord: @boondaas
