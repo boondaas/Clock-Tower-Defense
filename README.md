@@ -2,7 +2,7 @@
 
 A tiny Java tower defense game made for **Duke's 8-Bit Adventure**.
 
-Defend Duke's castle against an army of increasingly powerful clocks. Survive 30 waves, buy upgrades, collect vouchers, and try not to accidentally purchase **don't.**
+Defend Duke's castle against an army of increasingly powerful clocks. Survive 30 waves, buy upgrades, collect vouchers and try not to purchase **don't.** accidentaly
 
 ---
 ## How to play
@@ -14,17 +14,17 @@ There are 3 troops in the game:
 
 You only have the first one at the start and have to buy the rest in the **shop**.
 
-Upgrades are available in the shop separetly for each troop. the kind of upgrades:
+Upgrades are available in the shop separetly for each troop. The kind of upgrades:
 - damage
 - attack speed
 - critical chance
 
 There is another way of getting stronger: **vouchers**
 
-There are 3 random vouchers in the shop, refreshing every time you enter it.
+There are 3 random vouchers in the shop, rerolling every time you enter it.
 
-To see what a voucher does,click on them. **Duke** will tell you its name and description. 
-You can click **BUY** to purchase it and get its effects.
+To see what a voucher does, click on them. **Duke** will tell you its name and description. 
+You can click **BUY** to purchase it from Duke and get its effects.
 
 ### Money
 
@@ -55,7 +55,7 @@ No game engines, no frameworks, no helper libraries.
 
 The game contains exactly one texture:
 
-* Duke (used as the mouse cursor)
+* Duke, the Captain of the Castle and also the shopkeeper 
 
 Everything else is rendered using Java's built-in drawing functions:
 
@@ -64,7 +64,7 @@ Everything else is rendered using Java's built-in drawing functions:
 * Lines
 * Text
 
-This completely removes the need for sprite sheets, UI textures, animations, and other large asset files.
+This completely removes the need for sprite sheets, UI textures, animations and other large asset files.
 
 ---
 
@@ -195,7 +195,7 @@ If a feature could be implemented in 5 bytes instead of 50, the 5-byte version u
 
 This project was built under a simple philosophy:
 
-> If it works, is readable, and saves bytes, it's probably the correct solution.
+> If it works, is kinda readable, and saves bytes, i use it.
 
 Unless it's **don't.**
 

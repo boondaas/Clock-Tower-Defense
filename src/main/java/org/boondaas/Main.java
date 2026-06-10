@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.Polygon;
+import java.util.Objects;
 import java.util.Random;
 
 
@@ -107,20 +108,20 @@ public class Main extends JFrame {
         Voucher[] vouchers = {
                 new Voucher((byte) 0, (byte) 0, (short) 4, Color.BLUE, "Mr. Beast", "Sets all listed prices shop to 1$"),
                 new Voucher((byte) 1, (byte) 2, (short) 4, Color.BLUE, "sans", "Prevents death. Self-destructs"),
-                new Voucher((byte) 2, (byte) 2, (short) 4, Color.BLUE, "don't.", "still don't."),
+                new Voucher((byte) 2, (byte) 2, (short) 4, Color.BLUE, "don't.", "Still don't."),
                 new Voucher((byte) 3, (byte) 1, (short) 4, Color.BLUE, "Magnetite Dice", "+15% crit chance"),
                 new Voucher((byte) 4, (byte) 1, (short) 4, Color.cyan, "Credit Card", "Doubles money income"),
                 new Voucher((byte) 5, (byte) 0, (short) 4, Color.BLACK, "Glitch", "*.[#<\\ˇ%#$ß×¨(+=~¤đ"),                                                                                      //in case you cheated and looked at the code before playing, this voucher gives a random dmg multiplier between 0.5 and 3 to each attack
-                new Voucher((byte) 6, (byte) 0, (short) 4, Color.BLUE, "Slow down, boi!", "10% chance for each attack to stun the enemy"),
+                new Voucher((byte) 6, (byte) 0, (short) 4, Color.BLUE, "a", "nothing"),         //this cannot even show up...
                 new Voucher((byte) 7, (byte) 1, (short) 4, Color.BLUE, "Gift", "Upgrades 3 random stats by 3 levels"),
-                new Voucher((byte) 8, (byte) 3, (short) 4, Color.BLUE, "Ascension", "sets every stat's level to the level of the most upgraded stat"),
-                new Voucher((byte) 9, (byte) 1, (short) 4, Color.BLUE, "Bank", "gains +0.25 dmg for each $ you gain"),
-                new Voucher((byte) 10, (byte) 0, (short) 4, Color.RED, "GTA 6", "cannot do anything cuz it ain't exist..."),
+                new Voucher((byte) 8, (byte) 3, (short) 4, Color.BLUE, "Ascension", "Sets every stat's level to the level of the most upgraded stat"),
+                new Voucher((byte) 9, (byte) 1, (short) 4, Color.BLUE, "Bank", "Gains +0.25 dmg for each $ you have"),
+                new Voucher((byte) 10, (byte) 0, (short) 4, Color.RED, "GTA 6", "Cannot do anything cuz it doesn't exist..."),
                 new Voucher((byte) 11, (byte) 0, (short) 4, Color.BLUE, "Voucher", "X1.5 dmg"),
                 new Voucher((byte) 12, (byte) 3, (short) 4, Color.BLUE, "Death", "2% chance for each enemy to die instantly, 10% to start with X0.5 HP"),
                 new Voucher((byte) 13, (byte) 0, (short) 4, Color.RED, "Cake Is A Lie", "Gain 50$ instantly"),
                 new Voucher((byte) 14, (byte) 1, (short) 4, Color.BLACK, "Megalovania", "0.1% chance each tick to deal 20 dmg to all enemies"),
-                new Voucher((byte) 15, (byte) 2, (short) 4, Color.MAGENTA, "Golden Clock", "enemies drop X3 money"),
+                new Voucher((byte) 15, (byte) 2, (short) 4, Color.MAGENTA, "Golden Clock", "Enemies drop X3 money"),
                 new Voucher((byte) 16, (byte) 0, (short) 4, Color.BLUE, "Coffee", "+10% attack speed")
         };
 
@@ -132,6 +133,8 @@ public class Main extends JFrame {
 
         Random random = new Random();
 
+        float bankValue = 0;
+
 
         public GamePanel() {
             setBackground(new Color(144, 208, 255));
@@ -141,7 +144,7 @@ public class Main extends JFrame {
             timer.start();
 
             try {
-                duke = ImageIO.read(getClass().getResource("/images/duke.png"));
+                duke = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/duke.png")));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -167,7 +170,7 @@ public class Main extends JFrame {
                             } else if (rand < 15) {
                                 vouchersInShop[i] = 5;
                             } else if (rand < 22) {
-                                vouchersInShop[i] = 6;
+                                vouchersInShop[i] = 9;
                             } else if (rand < 29) {
                                 vouchersInShop[i] = 10;
                             } else if (rand < 36) {
@@ -197,6 +200,8 @@ public class Main extends JFrame {
                             } else {
                                 vouchersInShop[i] = 12;
                             }
+
+                            upgradePrices[i + 8] = vouchers[vouchersInShop[i]].price;
                         }
                     }
 
@@ -241,15 +246,28 @@ public class Main extends JFrame {
 
         public void update() {
 
-            if (wave >= 30 && enemies == null) {
+
+            if (random.nextFloat() < 0.001f && hasVoucher(14)) {
+                for(Enemy e : enemies) {
+                    if (e != null) {
+                        e.hp -= 20;
+                    }
+                }
+            }
+
+            boolean allDead = true;
+            for (Enemy e : enemies) {
+                if (e != null) { allDead = false; break; }
+            }
+            if (wave >= 30 && allDead) {
                 GameOver = true;
                 Won = true;
             }
 
             for (int i = 0; i < 3; i++) {
-                stats[i * 3] = 0.2f * statLevels[i * 3] + ((i == 3) ? (1.5f) : (1));
+                stats[i * 3] = 0.2f * statLevels[i * 3] + ((i == 2) ? (1.5f) : (1));
                 stats[i * 3 + 1] = (float) Math.pow(0.9, statLevels[i * 3 + 1]);
-                stats[i * 3 + 2] = 0.02f * (statLevels[i * 3 + 2]);
+                stats[i * 3 + 2] = 0.02f * (statLevels[i * 3 + 2] + (hasVoucher(3) ? 0.15f : 0f));
             }
 
 
@@ -277,17 +295,18 @@ public class Main extends JFrame {
                     if (enemies[i] == null) continue;
                     enemies[i].x -= enemies[i].speed;
                     if (enemies[i].x <= 280) {
-                        if (!hasVoucher(2)) {
+                        if (!hasVoucher(1)) {
                             GameOver = true;
                             Won = false;
                         } else {
-                            vouchersOwned[2] = -1;
+                            vouchersOwned[1] = -1;
                             enemies[i] = null;
                         }
                     }
+                    if (enemies[i] == null) continue;
                     if(enemies[i].hp <= 0) {
                         enemies[i] = null;
-                        money += (hasVoucher(16) ? 3 : 1) * (hasVoucher(4) ? 2 : 1);
+                        money += (hasVoucher(15) ? 3 : 1) * (hasVoucher(4) ? 2 : 1);
                     }
 
                 }
@@ -306,7 +325,7 @@ public class Main extends JFrame {
                     TR1CdCurr--;
                 } else {
 
-                    TR1CdCurr = (byte)(TR1Cooldown * stats[1]); // attack speed
+                    TR1CdCurr = (byte)(TR1Cooldown * stats[1] * (hasVoucher(16) ? 0.9f : 1f)); // attack speed
 
                     for (Enemy e : enemies) {
 
@@ -323,6 +342,10 @@ public class Main extends JFrame {
                             if (hasVoucher(12)) dmg *= 1.5f; // Voucher
                             if (hasVoucher(6)) dmg = 0.5f + random.nextFloat() * 2.5f;
 
+                            dmg += hasVoucher(9) ? money / 4 : 0;
+                            dmg *= (hasVoucher(5) ? random.nextFloat() * 2.5f + 0.5f : 1);
+                            dmg *= hasVoucher(11) ? 1.5f : 1;
+
                             e.hp -= dmg;
                         }
                     }
@@ -334,7 +357,7 @@ public class Main extends JFrame {
                         TR2CdCurr--;
                     } else {
 
-                        TR2CdCurr = (byte)(TR2Cooldown * stats[4]);
+                        TR2CdCurr = (byte)(TR2Cooldown * stats[4] * (hasVoucher(15) ? 0.9f : 1));
 
                         if (leftmost != -1) {
 
@@ -348,6 +371,9 @@ public class Main extends JFrame {
 
                             if (hasVoucher(12)) dmg *= 1.5f;
 
+                            dmg += hasVoucher(9) ? money / 4 : 0;
+                            dmg *= (hasVoucher(5) ? random.nextFloat() * 2.5f + 0.5f : 1);
+                            dmg *= hasVoucher(11) ? 1.5f : 1;
                             e.hp -= dmg;
                         }
                     }
@@ -359,7 +385,7 @@ public class Main extends JFrame {
                         TR3CdCurr--;
                     } else {
 
-                        TR3CdCurr = (byte)(TR3Cooldown * stats[7]);
+                        TR3CdCurr = (byte)(TR3Cooldown * stats[7] * (hasVoucher(15) ? 0.9f : 1));
 
                         if (leftmost != -1) {
 
@@ -380,6 +406,9 @@ public class Main extends JFrame {
 
                             if (hasVoucher(12)) dmg *= 1.5f;
 
+                            dmg += hasVoucher(9) ? money / 4 : 0;
+                            dmg *= (hasVoucher(5) ? random.nextFloat() * 2.5f + 0.5f : 1);
+                            dmg *= hasVoucher(11) ? 1.5f : 1;
                             e.hp -= dmg;
                         }
                     }
@@ -680,7 +709,7 @@ public class Main extends JFrame {
 
 
 
-            if (GameOver && !Won) {
+            if (GameOver) {
                 gameOver(g2);
             }
 
@@ -706,7 +735,7 @@ public class Main extends JFrame {
             g2.fillRect(0, 0, 1500, 800);
             g2.setColor(Color.RED);
             g2.setFont(new Font("Monospaced", Font.ITALIC, 70));
-            g2.drawString("Duke Ran Out Of Time", (getWidth() - g2.getFontMetrics().stringWidth("Duke Ran Out Of Time")) / 2, 300);
+            g2.drawString(Won ? "Duke Won" : "Duke Ran Out Of Time", (getWidth() - g2.getFontMetrics().stringWidth("Duke Ran Out Of Time")) / 2, 300);
         }
     }
 
